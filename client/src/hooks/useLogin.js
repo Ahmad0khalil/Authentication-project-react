@@ -3,6 +3,7 @@ import { useAuth } from "../contexts/AuthContext.jsx";
 import { message } from "antd";
 
 const useLogin = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
   const { login } = useAuth();
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(null);
@@ -11,16 +12,14 @@ const useLogin = () => {
     try {
       setError(null);
       setLoading(true);
-      const res = await fetch("http://localhost:3000/api/auth/login", {
+      const res = await fetch(API_URL + "/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(values),
       });
-      console.log("response", res);
       const data = await res.json();
-      console.log("data", data);
       if (res.status === 200) {
         message.success(data.message);
         login(data.token, data.user);
